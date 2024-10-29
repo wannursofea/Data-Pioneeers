@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:jamin_belaja/screens/authenticate/sign_in.dart';
 import 'package:jamin_belaja/screens/question/post_question.dart';
 import 'package:jamin_belaja/screens/question/question_list.dart';
-import 'package:jamin_belaja/screens/exercise/objective_question_list.dart';
-import 'package:jamin_belaja/screens/exercise/subjective_question_list.dart';
 import 'package:jamin_belaja/services/auth.dart';
 import 'package:jamin_belaja/models/user.dart' as custom_user;
 
@@ -18,42 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _showExerciseOptions() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Choose Exercise Type'),
-          content:
-              Text('Please select the type of exercise you want to attempt.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ObjectiveQuestionsList()),
-                );
-              },
-              child: Text('Objective Question'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SubjectiveQuestionsList()),
-                );
-              },
-              child: Text('Subjective Question'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -156,10 +119,6 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('Post a Question'),
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _showExerciseOptions,
-                  child: const Text('Exercise'),
-                ),
               ],
             ),
           ),
