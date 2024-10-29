@@ -1,129 +1,193 @@
 import 'package:flutter/material.dart';
-import 'package:jamin_belaja/screens/exercise/exercise_page.dart';
+import 'package:jamin_belaja/models/user.dart';
+import 'package:jamin_belaja/screens/authenticate/profile_page.dart';
+import 'package:jamin_belaja/screens/authenticate/edit_profile_page.dart';
+import 'package:jamin_belaja/screens/exercise/exercise_page.dart'; // Import the ExercisePage
+import 'package:jamin_belaja/screens/question/post_question.dart'; // Import the PostQuestionPage
+import 'package:jamin_belaja/screens/question/question_list.dart'; // Import the QuestionListPage
 import 'package:jamin_belaja/screens/text_book/textbook_page.dart';
-import 'package:provider/provider.dart';
-import 'package:jamin_belaja/screens/authenticate/sign_in.dart';
-import 'package:jamin_belaja/screens/question/post_question.dart';
-import 'package:jamin_belaja/screens/question/question_list.dart';
-import 'package:jamin_belaja/services/auth.dart';
-import 'package:jamin_belaja/models/user.dart' as custom_user;
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  _HomePageState createState() => _HomePageState();
+void main() {
+  runApp(MyApp());
 }
 
-class _HomePageState extends State<HomePage> {
- 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MainPage(
+          user: StudentData(
+              name: "Guest",
+              email: "guest@example.com",
+              uid: '',
+              password: '')),
+      routes: {
+        '/profile': (context) => ProfilePage(),
+        '/edit_profile': (context) => EditProfilePage(),
+        '/post_question': (context) =>
+            PostQuestionPage(), // Add the route for posting questions
+        '/exercise': (context) =>
+            ExercisePage(), // Add the route for ExercisePage
+        '/questions': (context) => QuestionList(),
+        '/textbooks': (context) =>
+            TextbookPage(), // Add the route for QuestionList
+      },
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  final StudentData user; // Add a field to hold user info
+  MainPage({required this.user}); // Constructor
+
+  final List<String> recentHistory = [
+    "Sejarah Textbook",
+    "Math Notes",
+    "Science Homework"
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF6C74E1),
+        title: Text('Main Page'),
+        automaticallyImplyLeading: false, // Remove back arrow
+      ),
+      body: SingleChildScrollView(
+        // Make the entire page scrollable
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // "Hello, Welcome" text
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Hello, Welcome 👋",
+                            style: TextStyle(fontSize: 24)),
+                        Text(user.name,
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight:
+                                    FontWeight.bold)), // Use user's name
+                      ],
+                    ),
+                  ),
+                  // Profile picture (CircleAvatar)
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(
+                        'assets/user_profile.png'), // Display profile picture
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Text(
+                  "Empowering Your Learning Journey, No Matter the Challenges!",
+                  style: TextStyle(fontSize: 22, color: Colors.blueAccent)),
+              SizedBox(height: 20),
 
-    return StreamProvider<custom_user.User?>.value(
-      value: _auth.user,
-      initialData: null,
-      child: Consumer<custom_user.User?>(builder: (context, user, _) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Jamin'),
-            centerTitle: true,
-            actions: <Widget>[
-              TextButton.icon(
-                onPressed: () async {
-                  // Show confirmation dialog
-                  bool? confirmLogout = await showDialog<bool>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Confirm Logout'),
-                        content: Text('Are you sure you want to logout?'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(false); // Return false
-                            },
-                            child: Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(true); // Return true
-                            },
-                            child: Text('Logout'),
-                          ),
-                        ],
-                      );
+              // Post a Question Section
+              Card(
+                child: ListTile(
+                  title: Text('Post a Question'),
+                  subtitle: Text('Share your questions with others!'),
+                  trailing: Icon(Icons.question_answer),
+                  onTap: () {
+                    // Navigate to the PostQuestionPage
+                    Navigator.pushNamed(context, '/post_question');
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // Question List Section
+              Card(
+                child: ListTile(
+                  title: Text('View Questions'),
+                  subtitle: Text('Browse questions shared by others!'),
+                  trailing: Icon(Icons.list),
+                  onTap: () {
+                    // Navigate to the QuestionListPage
+                    Navigator.pushNamed(context, '/questions');
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // Recent History Section
+              Text("Continue where you left off",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap:
+                    true, // Ensure it doesn't take more space than needed
+                physics:
+                    NeverScrollableScrollPhysics(), // Disable scrolling of ListView
+                itemCount: recentHistory.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(recentHistory[index]),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () {
+                      // Navigate to the respective book or note page
                     },
                   );
-
-                  if (confirmLogout == true) {
-                    await _auth.signOut();
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (context) => SignIn(toggleView: () {})),
-                    );
-                  }
                 },
-                icon: Icon(Icons.logout),
-                label: Text('Logout'),
+              ),
+
+              SizedBox(height: 20),
+
+              // Exercise Section
+              Text("Exercise Section",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              SizedBox(height: 10),
+              Card(
+                child: ListTile(
+                  title: Text('Access Exercises'),
+                  subtitle: Text('Practice your skills with exercises!'),
+                  trailing: Icon(Icons.assignment),
+                  onTap: () {
+                    // Navigate to the ExercisePage
+                    Navigator.pushNamed(context, '/exercise');
+                  },
+                ),
               ),
             ],
           ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TextbookPage()),
-                    );
-                  },
-                  child: const Text('Buku Teks'),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ExercisePage()),
-                    );
-                  },
-                  child: const Text('Buku Latihan'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the question list page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => QuestionList()),
-                    );
-                  },
-                  child: const Text('Questions'),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the post a question page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PostQuestionPage()),
-                    );
-                  },
-                  child: const Text('Post a Question'),
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0, // Set to 0 because it's the home page
+        onTap: (int index) {
+          if (index == 0) {
+            // Home Button: Stay on this page
+          } else if (index == 1) {
+            Navigator.pushNamed(context, '/textbooks');
+          } else if (index == 2) {
+            Navigator.pushNamed(context, '/profile');
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-        );
-      }),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books),
+            label: 'TextBook',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

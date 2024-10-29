@@ -4,7 +4,6 @@ import 'package:jamin_belaja/models/questions.dart';
 import 'package:jamin_belaja/services/database.dart';
 import 'package:jamin_belaja/services/auth.dart';
 import 'package:jamin_belaja/models/user.dart' as custom_user;
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionList extends StatefulWidget {
   @override
@@ -14,6 +13,9 @@ class QuestionList extends StatefulWidget {
 class _QuestionListState extends State<QuestionList> {
   final TextEditingController _searchController = TextEditingController();
   String _searchKeyword = '';
+
+  // Mock recent keywords
+  final List<String> recentKeywords = ['Form 3', 'Math', 'Algebra'];
 
   void _searchQuestions() {
     setState(() {
@@ -33,36 +35,65 @@ class _QuestionListState extends State<QuestionList> {
           : DatabaseService(uid: uid).searchQuestions(_searchKeyword),
       initialData: [],
       child: Scaffold(
+        backgroundColor: Color(0xFFF0F0F0),
         appBar: AppBar(
-          title: const Text('Questions'),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+          backgroundColor: Color(0xFF6C74E1),
+          elevation: 0,
+          title: const Text(''),
+          centerTitle: true,
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            // Search Bar
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Color(0xFF6C74E1),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: _searchController,
                       decoration: InputDecoration(
-                        labelText: 'Search by keyword',
+                        hintText: 'Search...',
+                        hintStyle: TextStyle(color: Colors.grey[300]),
+                        filled: true,
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(Icons.search, color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
                   ),
+                  SizedBox(width: 10),
                   IconButton(
-                    icon: Icon(Icons.search),
+                    icon: Icon(Icons.search, color: Colors.white),
                     onPressed: _searchQuestions,
                   ),
                 ],
               ),
             ),
+
+            // Recent Keywords
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  spacing: 8,
+                  children: recentKeywords.map((keyword) {
+                    return Chip(
+                      label: Text(keyword),
+                      backgroundColor: Color(0xFFEFEFEF),
+                      labelStyle: TextStyle(color: Colors.black54),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
+            // Questions List
             Expanded(
               child: Consumer<List<QuestionsList>>(
                 builder: (context, questions, _) {
@@ -70,31 +101,62 @@ class _QuestionListState extends State<QuestionList> {
                     return Center(child: Text('No questions found.'));
                   }
                   return ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     itemCount: questions.length,
                     itemBuilder: (context, index) {
                       final question = questions[index];
                       return Card(
+                        margin: EdgeInsets.only(bottom: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.grey[300],
+                                    child: Icon(Icons.person,
+                                        size: 15, color: Colors.grey[600]),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Spacer(),
+                                  Text(
+                                    '• ${question.createdAt.toDate().toLocal()}',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
                               Text(
                                 question.title,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              SizedBox(height: 8),
-                              Text(question.context),
-                              SizedBox(height: 8),
+                              SizedBox(height: 6),
                               Text(
-                                'Keywords: ${question.keywords.values.join(', ')}',
-                                style: TextStyle(color: Colors.grey),
+                                question.context,
+                                style: TextStyle(color: Colors.black87),
                               ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Created at: ${question.createdAt.toDate().toString()}',
-                                style: TextStyle(color: Colors.grey),
+                              SizedBox(height: 10),
+                              Wrap(
+                                spacing: 8,
+                                children:
+                                    question.keywords.values.map((keyword) {
+                                  return Chip(
+                                    label: Text(keyword),
+                                    backgroundColor: Colors.grey[100],
+                                    labelStyle:
+                                        TextStyle(color: Colors.black54),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           ),

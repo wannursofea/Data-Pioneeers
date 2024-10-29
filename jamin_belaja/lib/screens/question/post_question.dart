@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jamin_belaja/services/database.dart';
 
@@ -14,30 +13,22 @@ class _PostQuestionPageState extends State<PostQuestionPage> {
   final _yearOfStudyController = TextEditingController();
   final _subjectController = TextEditingController();
   final _topicController = TextEditingController();
-
   late final DatabaseService _databaseService;
 
   @override
   void initState() {
     super.initState();
-    // Get the current user
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       _databaseService = DatabaseService(uid: user.uid);
     } else {
-      // Handle the case where the user is not logged in
-      // For example, navigate to the login page
       Navigator.of(context).pushReplacementNamed('/login');
     }
   }
 
   Future<void> _submitPost(BuildContext context) async {
     if (_titleController.text.isNotEmpty &&
-        _contextController.text.isNotEmpty &&
-        _yearOfStudyController.text.isNotEmpty &&
-        _subjectController.text.isNotEmpty &&
-        _topicController.text.isNotEmpty) {
-      // Create a new question using the addQuestionData method
+        _contextController.text.isNotEmpty) {
       await _databaseService.addQuestionData(
         _titleController.text,
         _contextController.text,
@@ -50,7 +41,6 @@ class _PostQuestionPageState extends State<PostQuestionPage> {
 
       Navigator.of(context).pop(); // Close the page
     } else {
-      // Show an error message if any field is empty
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please fill in all fields')),
       );
@@ -60,37 +50,90 @@ class _PostQuestionPageState extends State<PostQuestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF0F0F0),
       appBar: AppBar(
-        title: const Text('Post Question'),
+        backgroundColor: Color(0xFF6C74E1),
+        elevation: 0,
+        title: Text(
+          'Post',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.close, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => _submitPost(context),
+            child: Text(
+              'Post',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Add your post title',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                hintText: 'Ask your question here',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              ),
+              maxLines: 8,
             ),
-            TextField(
-              controller: _contextController,
-              decoration: InputDecoration(labelText: 'Context'),
-            ),
+            SizedBox(height: 16),
+            // Keywords Section
             TextField(
               controller: _yearOfStudyController,
-              decoration: InputDecoration(labelText: 'Year of Study'),
+              decoration: InputDecoration(
+                hintText: 'Year of Study',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              ),
             ),
+            SizedBox(height: 8),
             TextField(
               controller: _subjectController,
-              decoration: InputDecoration(labelText: 'Subject'),
+              decoration: InputDecoration(
+                hintText: 'Subject',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              ),
             ),
+            SizedBox(height: 8),
             TextField(
               controller: _topicController,
-              decoration: InputDecoration(labelText: 'Topic'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _submitPost(context),
-              child: Text('Post'),
+              decoration: InputDecoration(
+                hintText: 'Topic',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              ),
             ),
           ],
         ),
