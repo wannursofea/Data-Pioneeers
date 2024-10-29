@@ -1,145 +1,201 @@
 import 'package:flutter/material.dart';
-import 'package:jamin_belaja/screens/authenticate/sign_in.dart';
-import 'package:jamin_belaja/services/auth.dart';
-import 'package:jamin_belaja/shared/constants.dart';
-import 'package:jamin_belaja/shared/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jamin_belaja/main.dart';
 
-class Register extends StatefulWidget {
-  final Function toggleView;
-  Register({required this.toggleView});
-
-  _RegisterState createState() => _RegisterState();
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _RegisterState extends State<Register> {
-  final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
-  final ValueNotifier<bool> _loading = ValueNotifier<bool>(false);
+class _SignUpPageState extends State<SignUpPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  //text field state
-  String email = '';
-  String password = '';
-  String error = '';
+  String? selectedEducationLevel;
+  String? selectedGrade;
+  String errorMessage = '';
+  String nameError = '';
+  String usernameError = '';
+  String ageError = '';
+  String emailError = '';
+  String phoneError = '';
+  String passwordError = '';
 
-  @override
-  void dispose() {
-    _loading.dispose();
-    super.dispose();
+  final List<String> educationLevels = ['Primary School', 'Secondary School'];
+  final Map<String, List<String>> grades = {
+    'Primary School': ['Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5', 'Standard 6'],
+    'Secondary School': ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5'],
+  };
+
+  bool validateFields() {
+    setState(() {
+      nameError = nameController.text.isEmpty ? 'Name is required' : '';
+      usernameError = usernameController.text.isEmpty ? 'Username is required' : '';
+      ageError = ageController.text.isEmpty ? 'Age is required' : '';
+      emailError = emailController.text.isEmpty ? 'Email is required' : '';
+      phoneError = phoneController.text.isEmpty ? 'Phone number is required' : '';
+      passwordError = passwordController.text.isEmpty ? 'Password is required' : '';
+      if (emailController.text.isNotEmpty && !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+        emailError = 'Invalid email format';
+      }
+    });
+    return nameError.isEmpty && usernameError.isEmpty && ageError.isEmpty && emailError.isEmpty && phoneError.isEmpty && passwordError.isEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _loading,
-      builder: (context, loading, child) {
-        return loading
-            ? Loading()
-            : Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Color(int.parse('0xff6C47E1')),
-                  elevation: 0.0,
-                  title: Text('Register to Jamin App'),
-                  actions: [
-                    TextButton.icon(
-                      icon: Icon(Icons.person),
-                      label: Text(
-                        'Sign In',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        widget.toggleView();
-                      },
-                    ),
-                  ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF6C74E1),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          },
+        ),
+        title: Text("Sign Up"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Create Your Profile",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: RegisterForm(
-                    formKey: _formKey,
-                    email: email,
-                    password: password,
-                    onEmailChanged: (value) => setState(() => email = value),
-                    onPasswordChanged: (value) =>
-                        setState(() => password = value),
-                    onSubmit: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _loading.value = true;
-                        dynamic result = await _auth
-                            .registerWithEmailAndPassword(email, password);
-                        if (result == null) {
-                          _loading.value = false;
-                          setState(() {
-                            error = 'Error signing in';
-                          });
-                        } else {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    SignIn(toggleView: widget.toggleView)),
-                          );
-                        }
-                      }
-                    },
-                    error: error,
+                SizedBox(height: 20),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(),
+                    errorText: nameError.isNotEmpty ? nameError : null,
                   ),
                 ),
-              );
-      },
-    );
-  }
-}
-
-class RegisterForm extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-  final String email;
-  final String password;
-  final Function(String) onEmailChanged;
-  final Function(String) onPasswordChanged;
-  final Function onSubmit;
-  final String error;
-
-  RegisterForm({
-    required this.formKey,
-    required this.email,
-    required this.password,
-    required this.onEmailChanged,
-    required this.onPasswordChanged,
-    required this.onSubmit,
-    required this.error,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 20.0),
-          TextFormField(
-            decoration: textInputDecoration.copyWith(hintText: 'Email'),
-            validator: (val) => val!.isEmpty ? 'Enter an email' : null,
-            onChanged: onEmailChanged,
+                SizedBox(height: 20),
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    labelText: "Username",
+                    border: OutlineInputBorder(),
+                    errorText: usernameError.isNotEmpty ? usernameError : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: ageController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Age",
+                    border: OutlineInputBorder(),
+                    errorText: ageError.isNotEmpty ? ageError : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                    errorText: emailError.isNotEmpty ? emailError : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: "Phone Number",
+                    border: OutlineInputBorder(),
+                    errorText: phoneError.isNotEmpty ? phoneError : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: selectedEducationLevel,
+                  hint: Text("Select Education Level"),
+                  items: educationLevels.map((String level) {
+                    return DropdownMenuItem<String>(
+                      value: level,
+                      child: Text(level),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedEducationLevel = newValue;
+                      selectedGrade = null;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                if (selectedEducationLevel != null)
+                  DropdownButtonFormField<String>(
+                    value: selectedGrade,
+                    hint: Text("Select Grade/Form"),
+                    items: grades[selectedEducationLevel]!.map((String grade) {
+                      return DropdownMenuItem<String>(
+                        value: grade,
+                        child: Text(grade),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedGrade = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                    errorText: passwordError.isNotEmpty ? passwordError : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                if (errorMessage.isNotEmpty)
+                  Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (validateFields()) {
+                      try {
+                        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+                        Navigator.pushNamed(context, '/login');
+                      } catch (e) {
+                        setState(() {
+                          errorMessage = e.toString();
+                        });
+                      }
+                    }
+                  },
+                  child: Text("Create Account"),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 20.0),
-          TextFormField(
-            decoration: textInputDecoration.copyWith(hintText: 'Password'),
-            obscureText: true,
-            validator: (val) =>
-                val!.length < 6 ? 'Enter a password 6+ chars long' : null,
-            onChanged: onPasswordChanged,
-          ),
-          SizedBox(height: 20.0),
-          ElevatedButton(
-            child: Text('Register', style: TextStyle(color: Colors.white)),
-            onPressed: () => onSubmit(),
-          ),
-          SizedBox(height: 12.0),
-          Text(
-            error,
-            style: TextStyle(color: Colors.red, fontSize: 14.0),
-          ),
-        ],
+        ),
       ),
     );
   }
