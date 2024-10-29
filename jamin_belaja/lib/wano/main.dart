@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:jamin_belaja/wano/models/user.dart';
+import 'package:jamin_belaja/wano/screens/wrapper.dart';
+import 'package:jamin_belaja/wano/services/auth.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/user.dart';
-import 'package:student_app_new/services/auth.dart';
-import 'package:student_app_new/screens/wrapper.dart'; // Import the Wrapper widget
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

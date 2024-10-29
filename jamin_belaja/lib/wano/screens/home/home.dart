@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/screens/authenticate/sign_in.dart';
-import 'package:student_app_new/screens/question/post_question.dart';
-import 'package:student_app_new/screens/question/question_list.dart';
-import 'package:student_app_new/screens/exercise/objective_question_list.dart';
-import 'package:student_app_new/screens/exercise/subjective_question_list.dart';
-import 'package:student_app_new/services/auth.dart';
-import 'package:student_app_new/models/user.dart' as custom_user;
+import 'package:jamin_belaja/wano/screens/authenticate/sign_in.dart';
+import 'package:jamin_belaja/wano/screens/question/post_question.dart';
+import 'package:jamin_belaja/wano/screens/question/question_list.dart';
+import 'package:jamin_belaja/wano/screens/exercise/objective_question_list.dart';
+import 'package:jamin_belaja/wano/screens/exercise/subjective_question_list.dart';
+import 'package:jamin_belaja/wano/services/auth.dart';
+import 'package:jamin_belaja/wano/models/user.dart' as custom_user;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

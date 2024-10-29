@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jamin_belaja/wano/models/user.dart';
+import 'package:jamin_belaja/wano/screens/authenticate/authenticate.dart';
+import 'package:jamin_belaja/wano/screens/home/home.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/user.dart';
-import 'package:student_app_new/screens/authenticate/authenticate.dart';
-import 'package:student_app_new/screens/home/home.dart';
 
 class Wrapper extends StatelessWidget {
   @override

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jamin_belaja/wano/models/objectivequestion.dart';
+import 'package:jamin_belaja/wano/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/objectivequestion.dart';
-import 'package:student_app_new/screens/exercise/ob_ex_details/ob_ex_details1.dart';
-import 'package:student_app_new/services/database.dart';
-import 'package:student_app_new/models/user.dart' as custom_user;
+import 'package:jamin_belaja/wano/models/user.dart' as custom_user;
 
 class ObjectiveQuestionsList extends StatelessWidget {
   @override

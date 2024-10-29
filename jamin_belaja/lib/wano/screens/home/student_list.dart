@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/students.dart';
+import 'package:jamin_belaja/wano/models/students.dart';
 
 class StudentList extends StatefulWidget {
   @override

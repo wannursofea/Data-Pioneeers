@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:student_app_new/services/database.dart';
+import 'package:jamin_belaja/wano/services/database.dart';
 
 class PostQuestionPage extends StatefulWidget {
   @override

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:student_app_new/models/objectivequestion.dart';
-import 'package:student_app_new/models/students.dart';
-import 'package:student_app_new/models/user.dart';
+import 'package:jamin_belaja/wano/models/objectivequestion.dart';
+import 'package:jamin_belaja/wano/models/questions.dart';
+import 'package:jamin_belaja/wano/models/students.dart';
+import 'package:jamin_belaja/wano/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:student_app_new/models/questions.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

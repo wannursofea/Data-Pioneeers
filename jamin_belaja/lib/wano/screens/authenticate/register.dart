@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:student_app_new/screens/authenticate/sign_in.dart';
-import 'package:student_app_new/services/auth.dart';
-import 'package:student_app_new/shared/constants.dart';
-import 'package:student_app_new/shared/loading.dart';
+import 'package:jamin_belaja/wano/screens/authenticate/sign_in.dart';
+import 'package:jamin_belaja/wano/services/auth.dart';
+import 'package:jamin_belaja/wano/shared/constants.dart';
+import 'package:jamin_belaja/wano/shared/loading.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;

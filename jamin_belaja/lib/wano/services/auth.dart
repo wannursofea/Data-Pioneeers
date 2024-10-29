@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:student_app_new/models/user.dart' as custom_user;
-import 'package:student_app_new/services/database.dart';
+import 'package:jamin_belaja/wano/services/database.dart';
+import 'package:jamin_belaja/wano/models/user.dart' as custom_user;
 
 class AuthService {
   final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;

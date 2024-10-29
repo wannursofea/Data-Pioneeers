@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/user.dart';
-import 'package:student_app_new/services/database.dart';
-import 'package:student_app_new/shared/constants.dart';
-import 'package:student_app_new/shared/loading.dart';
+import 'package:jamin_belaja/wano/models/user.dart';
+import 'package:jamin_belaja/wano/services/database.dart';
+import 'package:jamin_belaja/wano/shared/constants.dart';
+import 'package:jamin_belaja/wano/shared/loading.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 

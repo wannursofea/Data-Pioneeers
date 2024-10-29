@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_app_new/models/questions.dart';
-import 'package:student_app_new/services/database.dart';
-import 'package:student_app_new/services/auth.dart';
-import 'package:student_app_new/models/user.dart' as custom_user;
+import 'package:jamin_belaja/wano/models/questions.dart';
+import 'package:jamin_belaja/wano/services/database.dart';
+import 'package:jamin_belaja/wano/services/auth.dart';
+import 'package:jamin_belaja/wano/models/user.dart' as custom_user;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionList extends StatefulWidget {

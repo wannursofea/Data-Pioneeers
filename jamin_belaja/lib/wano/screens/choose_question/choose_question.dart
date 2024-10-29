@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:student_app_new/screens/exercise/objective_question_list.dart';
-import 'package:student_app_new/screens/exercise/subjective_question_list.dart';
+import 'package:jamin_belaja/wano/screens/exercise/objective_question_list.dart';
+import 'package:jamin_belaja/wano/screens/exercise/subjective_question_list.dart';
 
 class ChooseQuestionPage extends StatelessWidget {
   @override
@@ -18,7 +18,7 @@ class ChooseQuestionPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SubjectiveQuestionsPage()),
+                      builder: (context) => SubjectiveQuestionsList()),
                 );
               },
               child: Text('Subjective Questions'),
@@ -29,7 +29,7 @@ class ChooseQuestionPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ObjectiveQuestionsPage()),
+                      builder: (context) => SubjectiveQuestionsList()),
                 );
               },
               child: Text('Objective Questions'),

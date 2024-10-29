@@ -14,4 +14,4 @@ class Loading extends StatelessWidget {
     );
   }
 }
-// Compare this snippet from student_app_new/lib/screens/home/home.dart:
+// Compare this snippet from jamin_belaja/wano/lib/screens/home/home.dart:

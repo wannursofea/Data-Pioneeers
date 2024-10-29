@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_app_new/models/students.dart';
+import 'package:jamin_belaja/wano/models/students.dart';
 
 class StudentTile extends StatelessWidget {
   final StudentsList student;

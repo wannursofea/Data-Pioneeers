@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:student_app_new/screens/authenticate/register.dart';
-import 'package:student_app_new/screens/authenticate/sign_in.dart';
+import 'package:jamin_belaja/wano/screens/authenticate/register.dart';
+import 'package:jamin_belaja/wano/screens/authenticate/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
   _AuthenticateState createState() => _AuthenticateState();
