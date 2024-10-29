@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:jamin_belaja/models/objectivequestion.dart';
 import 'package:jamin_belaja/models/questions.dart';
 import 'package:jamin_belaja/models/students.dart';
-import 'package:jamin_belaja/models/subject_model.dart';
 import 'package:jamin_belaja/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final String uid;
@@ -112,75 +109,4 @@ class DatabaseService {
       }).toList();
     });
   }
-
-  CollectionReference get objectiveQuestionsCollection =>
-      FirebaseFirestore.instance.collection('objectivequestions');
-
-  Stream<List<ObjectiveQuestion>> get objectiveQuestionList {
-    return objectiveQuestionsCollection.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return ObjectiveQuestion.fromMap(
-            doc.data() as Map<String, dynamic>, doc.id);
-      }).toList();
-    });
-  }
-
-  Stream<List<Map<String, dynamic>>> getExerciseList() {
-    return _firestore
-        .collection('objectiveExercise')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return {
-          'id': doc.id,
-          'exerciseID': doc.get('exerciseID') ?? '',
-          'title': doc.get('title') ?? '',
-          'description': doc.get('description') ?? '',
-        };
-      }).toList();
-    });
-  }
-
-  Stream<List<ObjectiveQuestion>> getQuestionsForExercise(String exerciseID) {
-    return _firestore
-        .collection('objectiveExercise')
-        .doc(exerciseID)
-        .collection('Questions')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return ObjectiveQuestion.fromMap(
-            doc.data() as Map<String, dynamic>, doc.id);
-      }).toList();
-    });
-  }
-
-  CollectionReference get subjectCollection =>
-      FirebaseFirestore.instance.collection('subjects');
-
-  Future<List<Question>> fetchQuestions(
-      String subjectId, String chapterName) async {
-    final subject = Subject(id: subjectId, name: '', isFavorite: false);
-    return await subject.fetchQuestions(chapterName);
-  }
-
-  Future<Subject> getSubject(String subjectId) async {
-    final doc = await FirebaseFirestore.instance
-        .collection('subjects')
-        .doc(subjectId)
-        .get();
-    return Subject.fromFirestore(doc);
-  }
-
-  Future<List<Chapter>> fetchChapters(String subjectId) async {
-    final subject = Subject(id: subjectId, name: '', isFavorite: false);
-    return await subject.fetchChapters();
-  }
-
-  Future<void> toggleFavoriteStatus(String subjectId) async {
-    final subject = Subject(id: subjectId, name: '', isFavorite: false);
-    await subject.toggleFavoriteStatus();
-  }
-
-  
 }
