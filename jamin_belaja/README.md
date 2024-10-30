@@ -9,7 +9,7 @@ Our app provides essential educational resources and interactive support for stu
 
 ## Setup
 
-To run this app locally, follow these steps:
+### To run this app locally, follow these steps:
 
 1. Clone the repository:
    ```bash
@@ -22,7 +22,10 @@ To run this app locally, follow these steps:
 4. Run the App:
    ```bash
    flutter run
-   
+  
+### You can download the APK file from the following location: 
+edit this later: https://github.com/wannursofea/Data-Pioneeers/tree/main/jamin_belaja/build/outputs/flutter-apk
+
 ## Dependencies
 This app requires the following dependencies:
 - flutter
