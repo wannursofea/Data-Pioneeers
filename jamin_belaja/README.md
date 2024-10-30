@@ -24,7 +24,7 @@ Our app provides essential educational resources and interactive support for stu
    flutter run
   
 ### You can download the APK file from the following location: 
-edit this later: https://github.com/wannursofea/Data-Pioneeers/tree/main/jamin_belaja/build/outputs/flutter-apk
+edit this later: https://github.com/wannursofea/Data-Pioneeers/jamin_belaja_apk
 
 ## Dependencies
 This app requires the following dependencies:
