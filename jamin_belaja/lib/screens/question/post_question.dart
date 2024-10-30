@@ -77,13 +77,21 @@ class _PostQuestionPageState extends State<PostQuestionPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Add your post title',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            TextField(
+              controller: _titleController,
+              decoration: InputDecoration(
+                hintText: 'Add your post title',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
-              controller: _titleController,
+              controller: _contextController,
               decoration: InputDecoration(
                 hintText: 'Ask your question here',
                 border: OutlineInputBorder(
