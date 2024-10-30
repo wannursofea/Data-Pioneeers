@@ -15,10 +15,27 @@ To run this app locally, follow these steps:
    ```bash
    git clone https://github.com/wannursofea/Data-Pioneeers.git
    cd Data-Pioneeers/jamin_belaja
+2. Ensure Flutter is Installed: If you don't have Flutter installed, follow the official installation guide.
+3. Get the Dependencies:
+   ```bash
+   flutter pub get
+4. Run the App:
+   ```bash
+   flutter run
+   
 ## Dependencies
+This app requires the following dependencies:
+- flutter
+- firebase_core
+- cloud_firestore
+[Add any other dependencies here]
 
 ## Usage
-
+Once the app is running, you can:
+- Navigate through the online textbook library to access materials.
+- Participate in the Q&A section to ask or answer questions.
+- Use the exercise sections to reinforce your learning and track progress.
+  
 ## Presentation
 ![Image 1](./presentation/1.png)
 ![Image 2](./presentation/2.png)
