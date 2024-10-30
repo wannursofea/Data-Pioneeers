@@ -14,12 +14,25 @@ class DatabaseService {
   final CollectionReference studentCollection =
       FirebaseFirestore.instance.collection('students');
 
-  Future updateUserData(String name, String email, String password) async {
+  // Future updateUserData(String name, String email, String password, String phone) async {
+  //   return await studentCollection.doc(uid).set({
+  //     'name': name,
+  //     'email': email,
+  //     'password': password,
+  //   });
+  // Inside database.dart
+  Future<void> updateUserData(String name, String email, String password) async {
     return await studentCollection.doc(uid).set({
       'name': name,
       'email': email,
       'password': password,
+      // 'phone': phone,
+      // 'age': age,
+      // 'username': username,
+      // 'educationLevel': educationLevel,
+      // 'grade': grade,
     });
+
   }
 
   StudentData _studentDataFromSnapshot(DocumentSnapshot snapshot) {
