@@ -13,12 +13,16 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6C74E1), // AppBar background color set to the new color
+        backgroundColor:
+            Color(0xFF6C74E1), // AppBar background color set to the new color
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()), // Navigate to MainPage
-  );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage()), // Navigate to MainPage
+            );
           },
         ),
         title: Text("Login"),
@@ -54,27 +58,34 @@ class LoginPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+                    UserCredential userCredential =
+                        await _auth.signInWithEmailAndPassword(
                       email: emailController.text,
                       password: passwordController.text,
                     );
 
                     // Fetch user details from Firebase
-                    String userName = emailController.text; // Replace with actual user name retrieval logic
-                    StudentData user = StudentData(name: userName, email: emailController.text, uid: '', password: ''); // Create a UserModel instance
-                    
+                    String userName = emailController
+                        .text; // Replace with actual user name retrieval logic
+                    StudentData user = StudentData(
+                        name: userName,
+                        email: emailController.text,
+                        uid: '',
+                        password: ''); // Create a UserModel instance
+
                     // Navigate to main page after successful login
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(user: user),
-                       ) // Pass the user object
-                    );
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainPage(user: user),
+                        ) // Pass the user object
+                        );
                   } catch (e) {
                     // Handle error (you can also show a snackbar here)
                     print("Login failed: $e");
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Login failed. Please try again.")),
+                      SnackBar(
+                          content: Text("Login failed. Please try again.")),
                     );
                   }
                 },

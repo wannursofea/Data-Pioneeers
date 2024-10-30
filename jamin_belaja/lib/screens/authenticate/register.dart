@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jamin_belaja/main.dart';
+import 'package:jamin_belaja/services/auth.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -8,7 +8,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _auth = AuthService();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -28,7 +28,14 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final List<String> educationLevels = ['Primary School', 'Secondary School'];
   final Map<String, List<String>> grades = {
-    'Primary School': ['Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5', 'Standard 6'],
+    'Primary School': [
+      'Standard 1',
+      'Standard 2',
+      'Standard 3',
+      'Standard 4',
+      'Standard 5',
+      'Standard 6'
+    ],
     'Secondary School': ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5'],
   };
 
@@ -40,11 +47,17 @@ class _SignUpPageState extends State<SignUpPage> {
       emailError = emailController.text.isEmpty ? 'Email is required' : '';
       phoneError = phoneController.text.isEmpty ? 'Phone number is required' : '';
       passwordError = passwordController.text.isEmpty ? 'Password is required' : '';
-      if (emailController.text.isNotEmpty && !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+      if (emailController.text.isNotEmpty &&
+          !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
         emailError = 'Invalid email format';
       }
     });
-    return nameError.isEmpty && usernameError.isEmpty && ageError.isEmpty && emailError.isEmpty && phoneError.isEmpty && passwordError.isEmpty;
+    return nameError.isEmpty &&
+        usernameError.isEmpty &&
+        ageError.isEmpty &&
+        emailError.isEmpty &&
+        phoneError.isEmpty &&
+        passwordError.isEmpty;
   }
 
   @override
@@ -55,7 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           },
         ),
         title: Text("Sign Up"),
@@ -178,11 +192,26 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () async {
                     if (validateFields()) {
                       try {
-                        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passwordController.text,
+                        var user = await _auth.registerWithEmailAndPassword(
+                          emailController.text,
+                          passwordController.text,
                         );
-                        Navigator.pushNamed(context, '/login');
+
+                        if (user != null) {
+                          // Add user details to the students collection
+                          DatabaseService databaseService = DatabaseService(uid: user.uid);
+                          await databaseService.updateUserData(
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
+                          );
+
+                          Navigator.pushNamed(context, '/login');
+                        } else {
+                          setState(() {
+                            errorMessage = 'Registration failed. Please try again.';
+                          });
+                        }
                       } catch (e) {
                         setState(() {
                           errorMessage = e.toString();
