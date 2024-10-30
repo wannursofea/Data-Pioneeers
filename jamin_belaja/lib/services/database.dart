@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jamin_belaja/models/questions.dart';
+import 'package:jamin_belaja/models/reply.dart';
 import 'package:jamin_belaja/models/students.dart';
 import 'package:jamin_belaja/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -108,5 +109,39 @@ class DatabaseService {
         );
       }).toList();
     });
+  }
+
+  final CollectionReference replyCollection =
+      FirebaseFirestore.instance.collection('replies');
+
+  Stream<List<Reply>> getReplies(String questionId) {
+    return replyCollection
+        .doc(questionId)
+        .collection('replies')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Reply(
+          id: doc.id,
+          questionId: questionId,
+          userId: doc['userId'],
+          content: doc['content'],
+          createdAt: (doc['createdAt'] as Timestamp).toDate(),
+        );
+      }).toList();
+    });
+  }
+
+  Future<void> addReply(
+      String questionId, String content, String userId) async {
+    try {
+      await replyCollection.doc(questionId).collection('replies').add({
+        'userId': userId,
+        'content': content,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print('Failed to add reply: $e');
+    }
   }
 }

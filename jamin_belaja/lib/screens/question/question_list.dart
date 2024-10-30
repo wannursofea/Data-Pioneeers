@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamin_belaja/screens/question/reply_question.dart';
 import 'package:provider/provider.dart';
 import 'package:jamin_belaja/models/questions.dart';
 import 'package:jamin_belaja/services/database.dart';
@@ -74,7 +75,6 @@ class _QuestionListState extends State<QuestionList> {
                 ],
               ),
             ),
-
             // Recent Keywords
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -92,7 +92,6 @@ class _QuestionListState extends State<QuestionList> {
                 ),
               ),
             ),
-
             // Questions List
             Expanded(
               child: Consumer<List<QuestionsList>>(
@@ -105,60 +104,71 @@ class _QuestionListState extends State<QuestionList> {
                     itemCount: questions.length,
                     itemBuilder: (context, index) {
                       final question = questions[index];
-                      return Card(
-                        margin: EdgeInsets.only(bottom: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 15,
-                                    backgroundColor: Colors.grey[300],
-                                    child: Icon(Icons.person,
-                                        size: 15, color: Colors.grey[600]),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Spacer(),
-                                  Text(
-                                    '• ${question.createdAt.toDate().toLocal()}',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                question.title,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ReplyQuestion(question: question),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          margin: EdgeInsets.only(bottom: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: Colors.grey[300],
+                                      child: Icon(Icons.person,
+                                          size: 15, color: Colors.grey[600]),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Spacer(),
+                                    Text(
+                                      '• ${question.createdAt.toDate().toLocal()}',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 12),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                question.context,
-                                style: TextStyle(color: Colors.black87),
-                              ),
-                              SizedBox(height: 10),
-                              Wrap(
-                                spacing: 8,
-                                children:
-                                    question.keywords.values.map((keyword) {
-                                  return Chip(
-                                    label: Text(keyword),
-                                    backgroundColor: Colors.grey[100],
-                                    labelStyle:
-                                        TextStyle(color: Colors.black54),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
+                                SizedBox(height: 10),
+                                Text(
+                                  question.title,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                Text(
+                                  question.context,
+                                  style: TextStyle(color: Colors.black87),
+                                ),
+                                SizedBox(height: 10),
+                                Wrap(
+                                  spacing: 8,
+                                  children:
+                                      question.keywords.values.map((keyword) {
+                                    return Chip(
+                                      label: Text(keyword),
+                                      backgroundColor: Colors.grey[100],
+                                      labelStyle:
+                                          TextStyle(color: Colors.black54),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
