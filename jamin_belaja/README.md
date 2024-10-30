@@ -9,7 +9,7 @@ Our app provides essential educational resources and interactive support for stu
 
 ## Setup
 
-### To run this app locally, follow these steps:
+To run this app locally, follow these steps:
 
 1. Clone the repository:
    ```bash
@@ -23,9 +23,8 @@ Our app provides essential educational resources and interactive support for stu
    ```bash
    flutter run
   
-### You can download the APK file from the following location: 
-edit this later: https://github.com/wannursofea/Data-Pioneeers/jamin_belaja_apk
-
+Alternatively, you can download the APK file from the following location: 
+[JaminBelaja.apk](https://github.com/wannursofea/Data-Pioneeers/blob/main/jamin_belaja_apk/app-release.apk)
 ## Dependencies
 This app requires the following dependencies:
 - flutter
