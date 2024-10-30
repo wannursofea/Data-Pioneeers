@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jamin_belaja/main.dart';
+import 'package:jamin_belaja/services/auth.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -174,24 +175,57 @@ class _SignUpPageState extends State<SignUpPage> {
                     errorMessage,
                     style: TextStyle(color: Colors.red),
                   ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (validateFields()) {
-                      try {
-                        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        );
-                        Navigator.pushNamed(context, '/login');
-                      } catch (e) {
-                        setState(() {
-                          errorMessage = e.toString();
-                        });
+                  // Inside SignUpPage widget
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (validateFields()) {
+                        try {
+                          // Call the register method with all necessary fields
+                          var user = await AuthService().registerWithEmailAndPassword(
+                            emailController.text,
+                            passwordController.text,
+                            nameController.text,
+                            // phoneController.text,
+                            // ageController.text,
+                            // usernameController.text,
+                            // selectedEducationLevel,
+                            // selectedGrade,
+                          );
+                          if (user != null) {
+                            Navigator.pushNamed(context, '/login'); // or another page
+                          } else {
+                            setState(() {
+                              errorMessage = 'Failed to register.';
+                            });
+                          }
+                        } catch (e) {
+                          setState(() {
+                            errorMessage = e.toString();
+                          });
+                        }
                       }
-                    }
-                  },
-                  child: Text("Create Account"),
-                ),
+                    },
+                    child: Text("Create Account"),
+                  ),
+
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     if (validateFields()) {
+                //       try {
+                //         UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+                //           email: emailController.text,
+                //           password: passwordController.text,
+                //         );
+                //         Navigator.pushNamed(context, '/login');
+                //       } catch (e) {
+                //         setState(() {
+                //           errorMessage = e.toString();
+                //         });
+                //       }
+                //     }
+                //   },
+                //   child: Text("Create Account"),
+                // ),
               ],
             ),
           ),
