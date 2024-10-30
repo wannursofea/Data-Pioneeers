@@ -1,4 +1,4 @@
-# jamin_belaja
+# JaminBelaja
 
 ![Image 1](./presentation/1.png)
 ![Image 2](./presentation/2.png)
