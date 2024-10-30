@@ -11,10 +11,10 @@ Our app provides essential educational resources and interactive support for stu
 
 To run this app locally, follow these steps:
 
-1. **Clone the repository:**
+1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/wannursofea/Data-Pioneeers.git
+   cd Data-Pioneeers/jamin_belaja
 ## Dependencies
 
 ## Usage
