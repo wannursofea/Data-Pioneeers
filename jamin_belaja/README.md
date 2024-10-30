@@ -26,15 +26,17 @@ To run this app locally, follow these steps:
 ## Dependencies
 This app requires the following dependencies:
 - flutter
-- firebase_core
+- firebase_auth
 - cloud_firestore
-[Add any other dependencies here]
+- provider
+- firebase_core
+- flutter_spinkit
 
 ## Usage
 Once the app is running, you can:
 - Navigate through the online textbook library to access materials.
 - Participate in the Q&A section to ask or answer questions.
-- Use the exercise sections to reinforce your learning and track progress.
+- Use the exercise sections to reinforce learning experience
   
 ## Presentation
 ![Image 1](./presentation/1.png)
