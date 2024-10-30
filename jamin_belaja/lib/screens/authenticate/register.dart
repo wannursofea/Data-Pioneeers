@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamin_belaja/main.dart';
 import 'package:jamin_belaja/services/auth.dart';
+import 'package:jamin_belaja/services/database.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -195,6 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         var user = await _auth.registerWithEmailAndPassword(
                           emailController.text,
                           passwordController.text,
+                          nameController.text,
                         );
 
                         if (user != null) {
